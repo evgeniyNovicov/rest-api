@@ -22,8 +22,33 @@
                         </div>
                     </div>
                     <div class="search">
-                        <input type="text" class="search__input" placeholder="Введите город">
-                        <button class="search__button"> Найти город</button>
+                        <div class="search__input_wrapper">
+                            <input type="text" class="search__input" placeholder="Введите город" tabindex="0">
+                            <div class="search-result">
+                                <div class="search-result__inner">
+                                    <div class="search-result__item--template">
+                                    </div><div class="search-result__item--template">
+                                        <div class="search-result__item"></div>
+                                    </div>
+                                    <ul class="list">
+                                        <li class="list__item" tabindex="0" data-city-id="504341"><p class="city list__item-text">Pskov</p></li>
+                                        <li class="list__item" tabindex="0" data-city-id="520555"><p class="city list__item-text">Tokyo</p></li>
+                                        <li class="list__item" tabindex="0" data-city-id="501175"><p class="city list__item-text">Milan</p></li>
+                                        <li class="list__item" tabindex="0" data-city-id="472045"><p class="city list__item-text">Voronezh</p></li>
+                                        <li class="list__item" tabindex="0" data-city-id="578072"><p class="city list__item-text">Belgorod</p></li>
+                                        <li class="list__item" tabindex="0" data-city-id="2026070"><p class="city list__item-text">Bryansk</p></li>
+                                        <li class="list__item" tabindex="0" data-city-id="498677"><p class="city list__item-text">Saratov</p></li>
+                                        <li class="list__item" tabindex="0" data-city-id="500004"><p class="city list__item-text">Rybinsk</p></li>
+                                        <li class="list__item" tabindex="0" data-city-id="500004"><p class="city list__item-text">Minsk</p></li>
+                                        <li class="list__item" tabindex="0" data-city-id="500004"><p class="city list__item-text">Moscow</p></li>
+                                        <li class="list__item" tabindex="0" data-city-id="500004"><p class="city list__item-text">Paris</p></li>
+                                        <li class="list__item" tabindex="0" data-city-id="500004"><p class="city list__item-text">Prague</p></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <button class="search__button" id="button-search" tabindex="0"> Найти город</button>
+                        <button class="search__button button-update" id="button-update" tabindex="0"> Обновить</button>
                     </div>
                 </div>
             </div>
