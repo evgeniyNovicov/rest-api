@@ -105,10 +105,12 @@ function createCardCity(e) {
                         cardsCity = document.querySelectorAll('.grid-item')
                     })
                     .catch(error => {
-                        console.log(error);
+                        alert('Такой город не найден');
                     })
                 }
                 inputSearch.value = ''
+        } else {
+            alert('Заполните поле для ввода города')
         }
     }
 }
@@ -143,9 +145,11 @@ function updateCardCity() {
                     cardsCity = document.querySelectorAll('.grid-item')
                 })
                 .catch(error => {
-                    console.log(error);
+                    console.log(error)
                 })
         })
+    } else {
+        alert('Нет выбранных городов');
     }
 }
 function updateDataCard (cityCard, data) {
