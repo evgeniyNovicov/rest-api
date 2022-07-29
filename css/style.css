@@ -333,3 +333,6 @@ button {
   .loaded .preloader {
     display: none;
   }
+  .card-template{
+    display: none;
+  }

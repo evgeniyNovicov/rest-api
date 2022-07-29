@@ -29,6 +29,47 @@ function createSearchList () {
     const currentCityListElement = cuurentMapCityList.join('')
     cityListWrapper.insertAdjacentHTML('afterbegin', currentCityListElement)
 }
+
+function changeTempCelsiy(temp) {
+    return Math.round(temp - 273)
+}
+function getRandomArbitrary(min, max) {
+    return Math.random() * (max - min) + min;
+}
+function createDataForCardCity(name, tempMin, temp, tempMax, description, pressure) {
+    const cardTemplate = document.querySelector('[data-card="card"]')
+    const card = cardTemplate.cloneNode(true)
+    card.setAttribute('data-city', 'result')
+    const cardImage = card.querySelector('[data-card="image"]')
+    cardImage.setAttribute('src', 'image/city-' + Math.round(getRandomArbitrary(1,6)) + '.jpg')
+    const cardName = card.querySelector('[data-card="name"]')
+    cardName.textContent = name
+    const cardTempmin = card.querySelector('[data-card="temp-min"]')
+    cardTempmin.textContent = tempMin
+    const cardTempaverage = card.querySelector('[data-card="temp-average"]')
+    cardTempaverage.textContent = temp
+    const cardTempmax = card.querySelector('[data-card="temp-max"]')
+    cardTempmax.textContent = tempMax
+    const cardDescription = card.querySelector('[data-card="description"]')
+    cardDescription.textContent = description
+    const cardPressure = card.querySelector('[data-card="pressure"]')
+    cardPressure.textContent = pressure
+    return card
+}
+function removeCity(e) {
+    let cityCard = e.target.closest('.grid-item')
+    cityCard.remove()
+    cardsCity = document.querySelectorAll('[data-city="result"]')
+    if (cardsCity.length === 0) {
+        previosBlock.classList.remove('js-hidden')
+    }
+    const cityNameText = cityCard.querySelector('.grid-item__city-name').textContent
+    const currentCityIndex = cityCollection.findIndex((item) => item === cityNameText)
+    if(currentCityIndex !== -1) {
+        cityCollection.splice(currentCityIndex, 1)
+        createSearchList ()
+    }
+}
 function createCardCity(e) {
     if(e.type === 'click' || e.key === 'Enter' && !e.shiftKey) {
         let city = inputSearch.value
@@ -49,55 +90,16 @@ function createCardCity(e) {
                                 cityCollection.push(data.name)
                                 createSearchList ()
                                 previosBlock.classList.add('js-hidden')
+                                const name = data.name
+                                const tempMin = changeTempCelsiy (data.main.temp_min)
+                                const temp = changeTempCelsiy (data.main.temp)
+                                const tempMax = changeTempCelsiy (data.main.temp_max)
+                                const description = data.weather[0].description
+                                const pressure = data.main.pressure
+                                const resultCard = createDataForCardCity(name, tempMin, temp, tempMax, description, pressure)
+                                const table = document.querySelector('.table-grid')
+                                table.insertAdjacentElement('afterbegin', resultCard)
                             }
-                            let table = document.querySelector('.table-grid')
-
-                            function changeTempCelsiy(temp) {
-                                return Math.round(temp - 273)
-                            }
-
-                            function getRandomArbitrary(min, max) {
-                                return Math.random() * (max - min) + min;
-                            }
-                            table.insertAdjacentHTML('afterbegin', `
-                            <div class="grid-item loaded">
-                                <div class="grid-item__image_wrap">
-                                    <img class="grid-item__image" src="image/city-${Math.round(getRandomArbitrary(1,6))}.jpg" alt="image">
-                                    <div class="remove-city-block">
-                                        <div class="remove-city-block__inner">
-                                            <div class="plus plus-horizontal"></div>
-                                            <div class="plus plus-vertical"></div>
-                                        </div>
-                                    </div>
-                                    <div class="preloader">
-                                        <div class="preloader__row">
-                                            <div class="preloader__item"></div>
-                                            <div class="preloader__item"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <h2 class="grid-item__city-name">${data.name}</h2>
-                                <div class="grid-item__block">
-                                    <div class="grid-item__text">
-                                        Минимальная температура:<span id="temp-min">${changeTempCelsiy (data.main.temp_min)}</span>
-                                    </div>
-                                    <div class="grid-item__text">
-                                        Средняя температура:<span id="temp-average">${changeTempCelsiy (data.main.temp)}</span>
-                                    </div>
-                                    <div class="grid-item__text">
-                                        Максимальная температура:<span id="temp-max">${changeTempCelsiy (data.main.temp_max)}</span>
-                                    </div>
-                                </div>
-                                <div class="grid-item__block">
-                                    <div class="grid-item__text">
-                                        Описание:<span id="description">${data.weather[0].description}</span>
-                                    </div>
-                                    <div class="grid-item__text">
-                                        Давление:<span id="pressure">${data.main.pressure}</span>
-                                    </div>
-                                </div>
-                            </div>
-                        `)
                         }
                         let btnRemoveCity = document.querySelector('.remove-city-block')
                         btnRemoveCity.addEventListener('click', removeCity)
@@ -109,15 +111,33 @@ function createCardCity(e) {
                     })
                 }
                 inputSearch.value = ''
-        } else {
-            alert('Заполните поле для ввода города')
         }
     }
 }
 buttonSearch.addEventListener('click', createCardCity)
 document.addEventListener('keyup', createCardCity)
 
-buttonUpdate.addEventListener('click', updateCardCity)
+function updateTemperature(cityCard, data) {
+    let tempMin = cityCard.querySelector('[data-card="temp-min"]')
+    tempMin.textContent = data.main.temp_min
+    let tempAverage = cityCard.querySelector('[data-card="temp-average"]')
+    tempAverage.textContent = data.main.temp
+    let tempMax = cityCard.querySelector('[data-card="temp-max"]')
+    tempMax.textContent = data.main.temp_max
+}
+function updateDescription(cityCard, data) {
+    let description = cityCard.querySelector('#description')
+    description.textContent = data.weather[0].description
+}
+function updatePressure(cityCard, data) {
+    let pressure = cityCard.querySelector('#pressure')
+    pressure.textContent = data.main.pressure
+}
+function updateDataCard (cityCard, data) {
+    updateTemperature(cityCard, data)
+    updateDescription(cityCard, data)
+    updatePressure(cityCard, data)
+}
 function updateCardCity() {
     if(cityCollection.length){
         cityCollection.forEach((city) => {
@@ -152,41 +172,8 @@ function updateCardCity() {
         alert('Нет выбранных городов');
     }
 }
-function updateDataCard (cityCard, data) {
-    updateTemperature(cityCard, data)
-    updateDescription(cityCard, data)
-    updatePressure(cityCard, data)
-}
-function updateTemperature(cityCard, data) {
-    let tempMin = cityCard.querySelector('#temp-min')
-    tempMin.textContent = data.main.temp_min
-    let tempAverage = cityCard.querySelector('#temp-average')
-    tempAverage.textContent = data.main.temp
-    let tempMax = cityCard.querySelector('#temp-max')
-    tempMax.textContent = data.main.temp_max
-}
-function  updateDescription(cityCard, data) {
-    let description = cityCard.querySelector('#description')
-    description.textContent = data.weather[0].description
-}
-function  updatePressure(cityCard, data) {
-    let pressure = cityCard.querySelector('#pressure')
-    pressure.textContent = data.main.pressure
-}
-function removeCity(e) {
-    let cityCard = e.target.closest('.grid-item')
-    cityCard.remove()
-    cardsCity = document.querySelectorAll('.grid-item')
-    if (cardsCity.length === 0) {
-        previosBlock.classList.remove('js-hidden')
-    }
-    const cityNameText = cityCard.querySelector('.grid-item__city-name').textContent
-    const currentCityIndex = cityCollection.findIndex((item) => item === cityNameText)
-    if(currentCityIndex !== -1) {
-        cityCollection.splice(currentCityIndex, 1)
-        createSearchList ()
-    }
-}
+buttonUpdate.addEventListener('click', updateCardCity)
+
 
 const searchResultCityItemTemplate = document.querySelector('.search-result__item')
 const searchResult = document.querySelector('.search-result')

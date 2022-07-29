@@ -53,6 +53,45 @@
                 </div>
             </div>
         </section>
+        <div class="card-template">
+            <div class="grid-item loaded" data-card="card">
+                <div class="grid-item__image_wrap">
+                    <img class="grid-item__image" data-card="image" src="" alt="image">
+                    <div class="remove-city-block">
+                        <div class="remove-city-block__inner">
+                            <div class="plus plus-horizontal"></div>
+                            <div class="plus plus-vertical"></div>
+                        </div>
+                    </div>
+                    <div class="preloader">
+                        <div class="preloader__row">
+                            <div class="preloader__item"></div>
+                            <div class="preloader__item"></div>
+                        </div>
+                    </div>
+                </div>
+                <h2 class="grid-item__city-name" data-card="name"></h2>
+                <div class="grid-item__block">
+                    <div class="grid-item__text">
+                        Минимальная температура:<span id="temp-min" data-card="temp-min"></span>
+                    </div>
+                    <div class="grid-item__text">
+                        Средняя температура:<span id="temp-average" data-card="temp-average"></span>
+                    </div>
+                    <div class="grid-item__text">
+                        Максимальная температура:<span id="temp-max" data-card="temp-max"></span>
+                    </div>
+                </div>
+                <div class="grid-item__block">
+                    <div class="grid-item__text">
+                        Описание:<span id="description" data-card="description"></span>
+                    </div>
+                    <div class="grid-item__text">
+                        Давление:<span id="pressure" data-card="pressure"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script src="js/main.js"></script>
